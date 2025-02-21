@@ -18,3 +18,4 @@ unit test the product price addition
 
 No tricks.
 Not graded on UI beauty
+Not using any VS code extensions (copilot, linting/prettier, tailwind class suggestions)

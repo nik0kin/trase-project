@@ -1,7 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
-
-import { getAllProducts } from "../lib/products";
 import { useMatches } from "@remix-run/react";
+import React from 'react';
+
+import { formatPrice } from '../lib/format';
+import { getAllProducts } from "../lib/products";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,7 +24,7 @@ export default function Index() {
     <div className="flex h-screen items-center justify-center gap-2">
       <div className="flex flex-col items-center gap-16">
         <h1>
-          {product?.brand} {product?.title} - <strong>{product.price}</strong>
+          {product?.brand} {product?.title} - <strong>{formatPrice(product.price)}</strong>
         </h1>
         <p>{product?.description}</p>
         <small>{JSON.stringify(product)}</small>

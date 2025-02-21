@@ -1,7 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
-
-import { getAllProducts, getProductUrl } from "../lib/products";
 import { FC, ReactNode, useMemo, useState } from "react";
+
+import { calcProductsTotalCost, getAllProducts, getProductUrl } from "../lib/products";
+import { formatPrice } from '../lib/format';
 
 export const meta: MetaFunction = () => {
   return [
@@ -72,11 +73,16 @@ export default function Index() {
                   {/* {icon} */}
                   {product.brand}
                   <strong>{product.title}</strong>
-                  <strong>{product.price}</strong>
+                  <strong>{formatPrice(product.price)}</strong>
                 </a>
               </li>
             ))}
           </ul>
+        </div>
+        <div>
+          <h2>You want to buy all {products.length} products?</h2>
+          <br/>
+          <button className="p-3 border border-solid" style={{fontSize: '2rem'}} onClick={() => alert('we love alerts')}>Ok - Total: {formatPrice(calcProductsTotalCost(products))}</button>
         </div>
       </div>
     </div>
