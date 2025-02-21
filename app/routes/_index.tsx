@@ -1,13 +1,17 @@
-import type { MetaFunction } from "@remix-run/node";
-import { FC, ReactNode, useMemo, useState } from "react";
+import type { MetaFunction } from '@remix-run/node';
+import { FC, ReactNode, useMemo, useState } from 'react';
 
-import { calcProductsTotalCost, getAllProducts, getProductUrl } from "../lib/products";
+import {
+  calcProductsTotalCost,
+  getAllProducts,
+  getProductUrl,
+} from '../lib/products';
 import { formatPrice } from '../lib/format';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Marketplace Products" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: 'Marketplace Products' },
+    { name: 'description', content: 'Welcome to Remix!' },
   ];
 };
 
@@ -18,10 +22,13 @@ export default function Index() {
   const [sortType, setSortType] = useState<'alpha' | 'price'>('alpha');
 
   const sortedProducts = useMemo(() => {
-
     return [...products].sort((p1, p2) => {
-      if (sortType === 'alpha') return sortDirection ? p1.title.localeCompare(p2.title) : p2.title.localeCompare(p1.title); // could DRY with Math.abs
-      if (sortType === 'price') return sortDirection ? p1.price - p2.price : p2.price - p1.price; 
+      if (sortType === 'alpha')
+        return sortDirection
+          ? p1.title.localeCompare(p2.title)
+          : p2.title.localeCompare(p1.title); // could DRY with Math.abs
+      if (sortType === 'price')
+        return sortDirection ? p1.price - p2.price : p2.price - p1.price;
 
       return 0;
     });
@@ -40,25 +47,27 @@ export default function Index() {
           <div className="flex gap-2">
             <SortButton
               onClick={() => {
-                if (sortType === "alpha") {
+                if (sortType === 'alpha') {
                   setSortDirection((direction) => !direction);
                   return;
                 }
-                setSortType("alpha");
+                setSortType('alpha');
               }}
             >
-              Sort By Alpha - {sortType === 'alpha' ? (sortDirection ? 'V' : '^') : null}
+              Sort By Alpha -{' '}
+              {sortType === 'alpha' ? (sortDirection ? 'V' : '^') : null}
             </SortButton>
             <SortButton
               onClick={() => {
-                if (sortType === "price") {
+                if (sortType === 'price') {
                   setSortDirection((direction) => !direction);
                   return;
                 }
-                setSortType("price");
+                setSortType('price');
               }}
             >
-              Sort By Price - {sortType === 'price' ? (sortDirection ? 'V' : '^') : null}
+              Sort By Price -{' '}
+              {sortType === 'price' ? (sortDirection ? 'V' : '^') : null}
             </SortButton>
           </div>
         </nav>
@@ -81,14 +90,25 @@ export default function Index() {
         </div>
         <div>
           <h2>You want to buy all {products.length} products?</h2>
-          <br/>
-          <button className="p-3 border border-solid" style={{fontSize: '2rem'}} onClick={() => alert('we love alerts')}>Ok - Total: {formatPrice(calcProductsTotalCost(products))}</button>
+          <br />
+          <button
+            className="p-3 border border-solid"
+            style={{ fontSize: '2rem' }}
+            onClick={() => alert('we love alerts')}
+          >
+            Ok - Total: {formatPrice(calcProductsTotalCost(products))}
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-const SortButton: FC<{ children: ReactNode; onClick: () => void }> = ({ children, onClick }) => (
-  <button className="p-2 border border-solid border-black" onClick={onClick}>{children}</button>
+const SortButton: FC<{ children: ReactNode; onClick: () => void }> = ({
+  children,
+  onClick,
+}) => (
+  <button className="p-2 border border-solid border-black" onClick={onClick}>
+    {children}
+  </button>
 );

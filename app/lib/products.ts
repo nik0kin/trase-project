@@ -1,4 +1,4 @@
-import productsJSON from "./products.json";
+import productsJSON from './products.json';
 
 export interface Product {
   id: number;

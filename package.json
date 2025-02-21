@@ -7,7 +7,7 @@
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "prettier": "npx prettier . --check --write",
+    "prettier-fix": "npx prettier . --check --write",
     "preview": "vite preview",
     "generate-data": "curl https://dummyjson.com/products > app/lib/products.json",
     "test": "jest",

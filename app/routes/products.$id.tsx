@@ -1,14 +1,13 @@
-import type { MetaFunction } from "@remix-run/node";
-import { useMatches } from "@remix-run/react";
-import React from 'react';
+import type { MetaFunction } from '@remix-run/node';
+import { useMatches } from '@remix-run/react';
 
 import { formatPrice } from '../lib/format';
-import { getAllProducts } from "../lib/products";
+import { getAllProducts } from '../lib/products';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Product Page" },
-    { name: "description", content: "blah blah product seo" },
+    { title: 'Product Page' },
+    { name: 'description', content: 'blah blah product seo' },
   ];
 };
 
@@ -24,7 +23,8 @@ export default function Index() {
     <div className="flex h-screen items-center justify-center gap-2">
       <div className="flex flex-col items-center gap-16">
         <h1>
-          {product?.brand} {product?.title} - <strong>{formatPrice(product.price)}</strong>
+          {product?.brand} {product?.title} -{' '}
+          <strong>{formatPrice(product.price)}</strong>
         </h1>
         <p>{product?.description}</p>
         <small>{JSON.stringify(product)}</small>
@@ -33,7 +33,7 @@ export default function Index() {
           Big fancy unimplemented Add to Cart Button
         </button>
 
-        <a href="/" style={{ color: "blue" }}>
+        <a href="/" style={{ color: 'blue' }}>
           Back to All Products
         </a>
       </div>

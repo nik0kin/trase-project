@@ -1,13 +1,13 @@
 /* eslint-disable */
 
-const { pathsToModuleNameMapper } = require("ts-jest");
-const { compilerOptions } = require("./tsconfig");
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('./tsconfig');
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  roots: ["<rootDir>"],
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
+  roots: ['<rootDir>'],
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths ?? {}),
   // transform: {
