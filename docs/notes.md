@@ -11,3 +11,10 @@ https://remix.run/docs/en/main/guides/spa-mode
 ---
 
 unit test the product price addition
+
+---
+
+## Assumptions
+
+No tricks.
+Not graded on UI beauty
