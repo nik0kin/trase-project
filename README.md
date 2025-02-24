@@ -1,5 +1,19 @@
 # trase-project
 
+## Setup
+
+Install npm dependencies:
+
+```shellscript
+npm i
+```
+
+Generate dummy product data
+
+```shellscript
+npm run generate-data
+```
+
 ## Development
 
 Run development server with:
