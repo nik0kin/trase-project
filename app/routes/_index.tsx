@@ -1,9 +1,10 @@
 import type { MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { FC, ReactNode, useMemo, useState } from 'react';
 
 import {
   calcProductsTotalCost,
-  getAllProducts,
+  getAllProducts2,
   getProductUrl,
 } from '../lib/products';
 import { formatPrice } from '../lib/format';
@@ -15,8 +16,16 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
+export const loader = async () => {
+  return {
+    products: await getAllProducts2()
+  }
+}
+
+
 export default function Index() {
-  const products = getAllProducts();
+  const {products} = useLoaderData<typeof loader>();
 
   const [sortDirection, setSortDirection] = useState(true); // true = ascending
   const [sortType, setSortType] = useState<'alpha' | 'price'>('alpha');
