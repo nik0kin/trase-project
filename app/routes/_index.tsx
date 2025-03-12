@@ -17,16 +17,20 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+const PRODUCTS_PER_PAGE = 10;
+
 export const loader = async () => {
+  const products = await getAllProducts2();
   return {
-    products: await getAllProducts2(),
+    products: products,
+    totalPages: products.length % PRODUCTS_PER_PAGE,
   };
 };
 
 export default function Index() {
   const { auth } = useContext(authContext);
 
-  const { products } = useLoaderData<typeof loader>();
+  const { products, totalPages } = useLoaderData<typeof loader>();
   // const products = getAllProducts();
 
   const [sortDirection, setSortDirection] = useState(true); // true = ascending
@@ -35,8 +39,10 @@ export default function Index() {
 
   const [pendingSetting, setSeting] = useState();
 
-  const sortedFilteredProducts = useMemo(() => {
-    return [...products]
+  const [page, setPage] = useState(1);
+
+  const sortedFilteredPaginatedProducts = useMemo(() => {
+    const sortedFilteredProducts = [...products]
       .sort((p1, p2) => {
         if (sortType === 'alpha')
           return sortDirection
@@ -48,6 +54,13 @@ export default function Index() {
         return 0;
       })
       .filter((p) => p.title.includes(filterString));
+
+    const startingProductIndex = page * PRODUCTS_PER_PAGE;
+    // might not be right function (possible bug here)
+    return sortedFilteredProducts.slice(
+      startingProductIndex,
+      startingProductIndex + PRODUCTS_PER_PAGE
+    );
   }, [filterString, products, sortDirection, sortType]);
 
   useEffect(() => {
@@ -100,7 +113,7 @@ export default function Index() {
         </nav>
         <div>
           <ul>
-            {sortedFilteredProducts.map((product) => (
+            {sortedFilteredPaginatedProducts.map((product) => (
               <li key={product.id}>
                 <a
                   className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
@@ -114,6 +127,7 @@ export default function Index() {
               </li>
             ))}
           </ul>
+          <button onClick={() => setPage((n) => n + 1)}>Next page</button>
         </div>
         <div>
           <h2>You want to buy all {products.length} products?</h2>
