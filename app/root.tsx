@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from '@remix-run/node';
 
 import './tailwind.css';
+import { FC, ReactNode, createContext, useState } from 'react';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -40,8 +41,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export const authContext = createContext(undefined as any);
+
+const AuthManager: FC<{ children: ReactNode }> = ({ children }) => {
+  const [auth, setAuth] = useState();
+
+  return (
+    <authContext.Provider value={{ auth, setAuth }}>
+      {children}
+    </authContext.Provider>
+  );
+};
+
+authContext.Consumer;
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthManager>
+      <Outlet />
+    </AuthManager>
+  );
 }
 
 export function HydrateFallback() {

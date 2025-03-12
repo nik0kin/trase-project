@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { FC, ReactNode, useMemo, useState } from 'react';
+import { FC, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
   calcProductsTotalCost,
@@ -8,6 +8,7 @@ import {
   getProductUrl,
 } from '../lib/products';
 import { formatPrice } from '../lib/format';
+import { authContext } from '~/root';
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,32 +17,45 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-
 export const loader = async () => {
   return {
-    products: await getAllProducts2()
-  }
-}
-
+    products: await getAllProducts2(),
+  };
+};
 
 export default function Index() {
-  const {products} = useLoaderData<typeof loader>();
+  const { auth } = useContext(authContext);
+
+  const { products } = useLoaderData<typeof loader>();
+  // const products = getAllProducts();
 
   const [sortDirection, setSortDirection] = useState(true); // true = ascending
+  const [filterString, setFilter] = useState('');
   const [sortType, setSortType] = useState<'alpha' | 'price'>('alpha');
 
-  const sortedProducts = useMemo(() => {
-    return [...products].sort((p1, p2) => {
-      if (sortType === 'alpha')
-        return sortDirection
-          ? p1.title.localeCompare(p2.title)
-          : p2.title.localeCompare(p1.title); // could DRY with Math.abs
-      if (sortType === 'price')
-        return sortDirection ? p1.price - p2.price : p2.price - p1.price;
+  const [pendingSetting, setSeting] = useState();
 
-      return 0;
-    });
-  }, [products, sortDirection, sortType]);
+  const sortedFilteredProducts = useMemo(() => {
+    return [...products]
+      .sort((p1, p2) => {
+        if (sortType === 'alpha')
+          return sortDirection
+            ? p1.title.localeCompare(p2.title)
+            : p2.title.localeCompare(p1.title); // could DRY with Math.abs
+        if (sortType === 'price')
+          return sortDirection ? p1.price - p2.price : p2.price - p1.price;
+
+        return 0;
+      })
+      .filter((p) => p.title.includes(filterString));
+  }, [filterString, products, sortDirection, sortType]);
+
+  useEffect(() => {
+    // const tag = createElement('script');
+    // document.head.append(tag);
+    // const nav = document.querySelector('nav');
+    // nav?.style.border = '1px purple solid';
+  }, []);
 
   return (
     <div className="flex items-center justify-center">
@@ -79,10 +93,14 @@ export default function Index() {
               {sortType === 'price' ? (sortDirection ? 'V' : '^') : null}
             </SortButton>
           </div>
+          <div>
+            <h2>Filter</h2>
+            <input type="text" onChange={(s) => setFilter(s?.target.value)} />
+          </div>
         </nav>
         <div>
           <ul>
-            {sortedProducts.map((product) => (
+            {sortedFilteredProducts.map((product) => (
               <li key={product.id}>
                 <a
                   className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
